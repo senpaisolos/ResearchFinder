@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <!-- <title> Drop Down Sidebar Menu | CodingLab </title> -->
+    <!-- <link rel="stylesheet" href="css/style.css"> -->
+    <!-- Boxicons CDN Link -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <title>Research Finder</title>
+    <style>
+        /* Google Fonts Import Link */
+
+
+        
+.notification_wrap{
+	width: 500px;
+	margin: 120px auto 0;
+}
+
+.notification_wrap .notification_icon{
+	position: fixed;
+	font-size: 32px;
+	margin: 0 auto;
+	text-align: center;
+	color: #605dff;
+  top: 25px;
+  right: 138px;
+  z-index: 20000;
+  display: block;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  cursor: pointer;
+  transition: all 200ms linear;
+  box-shadow: 0 0 25px rgba(255,235,167,.45);
+}
+
+.notification_wrap .notification_icon .fa-bell{
+	cursor: pointer;
+}
+
+.notification_wrap .dropdown{
+  top: 70px;
+  right:10px;
+	width: 300px;
+	height: auto;
+  max-height: 200px; /* Limit height */
+  overflow-y: auto;  /* Enable scrolling */
+	background: #fff;
+	border-radius: 5px;
+	/* box-shadow: 2px 2px 3px rgba(0,0,0,0.125); */
+	margin: 15px auto 0;
+	padding: 15px;
+	position: fixed;
+	display: none;
+}
+
+.notification_wrap .dropdown .notify_item{
+	display: flex;
+	align-items: center;
+	padding: 10px 0;
+	border-bottom: 1px solid #dbdaff;
+}
+
+.notification_wrap .dropdown .notify_item:last-child{
+	border-bottom: 0px;
+}
+
+.notification_wrap .dropdown .notify_item .notify_img{
+	margin-right: 15px;
+}
+
+.notification_wrap .dropdown .notify_item .notify_info p{
+	margin-bottom: 5px;
+}
+
+.notification_wrap .dropdown .notify_item .notify_info p span{
+	color: #605dff;
+	margin-left: 5px;
+}
+
+.notification_wrap .dropdown .notify_item .notify_info .notify_time{
+	color: #c5c5e6;
+	font-size: 10px;
+}
+
+.notification_wrap .dropdown:before{
+	content: "";
+	position: absolute;
+	top: -30px;
+	left: 50%;
+	transform: translateX(-50%);
+	border: 15px solid;
+	border-color: transparent transparent #fff transparent;
+}
+
+.notification_wrap .dropdown.active{
+	display: block;
+}
+
+  .light-theme {
+    --sidebar-background: #b4afef;
+    --homesection-background: url('https://assets.codepen.io/1462889/back-page.svg') ;
+    --logo-detailscolor: #fff;
+    --hover-background: #908db0;
+    --navlinks-i: #000000; 
+    --linkname-color: #000000;
+    --submenu-back: #908db0;
+    --submenu-a: #000000;
+    --profile-details: #847fb6;
+  }
+
+  /* Add dark-theme styles */
+  .dark-theme {
+    --sidebar-background: #11101d;
+    --homesection-background: url('https://assets.codepen.io/1462889/web-app-back.svg');
+    --logo-detailscolor: #919191;
+    --hover-background: #1d1b31;
+    --navlinks-i: #fff; 
+    --linkname-color: #fff;
+    --submenu-back: #1d1b31;
+    --submenu-a: #fff;
+    --profile-details: #1d1b31;
+  }
+
+  
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+.sidebar{
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 260px;
+  background: var(--sidebar-background);
+  z-index: 100;
+  transition: all 0.5s ease;
+}
+.sidebar.close{
+  width: 78px;
+}
+.sidebar .logo-details{
+  height: 60px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+.sidebar .logo-details i{
+  font-size: 30px;
+  color: var(--logo-detailscolor);
+  height: 50px;
+  min-width: 78px;
+  text-align: center;
+  line-height: 50px;
+}
+.sidebar .logo-details .logo_name{
+  font-size: 22px;
+  color: var(--logo-detailscolor);
+  font-weight: 600;
+  transition: 0.3s ease;
+  transition-delay: 0.1s;
+}
+.sidebar.close .logo-details .logo_name{
+  transition-delay: 0s;
+  opacity: 0;
+  pointer-events: none;
+}
+.sidebar .nav-links{
+  height: 100%;
+  padding: 30px 0 150px 0;
+  overflow: auto;
+}
+.sidebar.close .nav-links{
+  overflow: visible;
+}
+.sidebar .nav-links::-webkit-scrollbar{
+  display: none;
+}
+.sidebar .nav-links li{
+  position: relative;
+  list-style: none;
+  transition: all 0.4s ease;
+}
+.sidebar .nav-links li:hover{
+  background: var(--hover-background);
+}
+.sidebar.light-mode .nav-links li:hover{
+  background: var(--hover-background);
+}
+.sidebar .nav-links li .iocn-link{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sidebar.close .nav-links li .iocn-link{
+  display: block
+}
+.sidebar .nav-links li i{
+  height: 50px;
+  min-width: 78px;
+  text-align: center;
+  line-height: 50px;
+  color: var(--navlinks-i);
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.sidebar .nav-links li.showMenu i.arrow{
+  transform: rotate(-180deg);
+}
+.sidebar.close .nav-links i.arrow{
+  display: none;
+}
+.sidebar .nav-links li a{
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+.sidebar .nav-links li a .link_name{
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--linkname-color);
+  transition: all 0.4s ease;
+}
+.sidebar.close .nav-links li a .link_name{
+  opacity: 0;
+  pointer-events: none;
+}
+.sidebar .nav-links li .sub-menu{
+  padding: 6px 6px 14px 80px;
+  margin-top: -10px;
+  background: var(--submenu-back);
+  display: none;
+}
+.sidebar .nav-links li.showMenu .sub-menu{
+  display: block;
+}
+.sidebar .nav-links li .sub-menu a{
+  color: var(--submenu-a);
+  font-size: 15px;
+  padding: 5px 0;
+  white-space: nowrap;
+  opacity: 0.6;
+  transition: all 0.3s ease;
+}
+.sidebar .nav-links li .sub-menu a:hover{
+  opacity: 1;
+}
+.sidebar.close .nav-links li .sub-menu{
+  position: absolute;
+  left: 100%;
+  top: -10px;
+  margin-top: 0;
+  padding: 10px 20px;
+  border-radius: 0 6px 6px 0;
+  opacity: 0;
+  display: block;
+  pointer-events: none;
+  transition: 0s;
+}
+.sidebar.close .nav-links li:hover .sub-menu{
+  top: 0;
+  opacity: 1;
+  pointer-events: auto;
+  transition: all 0.4s ease;
+}
+.sidebar .nav-links li .sub-menu .link_name{
+  display: none;
+}
+.sidebar.close .nav-links li .sub-menu .link_name{
+  font-size: 18px;
+  opacity: 1;
+  display: block;
+}
+.sidebar .nav-links li .sub-menu.blank{
+  opacity: 1;
+  pointer-events: auto;
+  padding: 3px 20px 6px 16px;
+  opacity: 0;
+  pointer-events: none;
+}
+.sidebar .nav-links li:hover .sub-menu.blank{
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.sidebar .profile-details{
+  position: fixed;
+  bottom: 0;
+  width: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--profile-details);
+  padding: 12px 0;
+  transition: all 0.5s ease;
+}
+.sidebar.close .profile-details{
+  background: none;
+}
+.sidebar.close .profile-details{
+  width: 78px;
+}
+.sidebar .profile-details .profile-content{
+  display: flex;
+  align-items: center;
+}
+.sidebar .profile-details img{
+  height: 52px;
+  width: 52px;
+  object-fit: cover;
+  border-radius: 16px;
+  margin: 0 14px 0 12px;
+  background: #1d1b31;
+  transition: all 0.5s ease;
+}
+.sidebar.close .profile-details img{
+  padding: 10px;
+}
+.sidebar .profile-details .profile_name,
+.sidebar .profile-details .job{
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.sidebar.close .profile-details i,
+.sidebar.close .profile-details .profile_name,
+.sidebar.close .profile-details .job{
+  display: none;
+}
+.sidebar .profile-details .job{
+  font-size: 12px;
+}
+
+.dark-light {
+  display: none; /* Hide the checkbox */
+}
+
+.dark-light:checked + label,
+.dark-light:not(:checked) + label{
+  position: fixed;
+  top: 25px;
+  right: 70px;
+  z-index: 20000;
+  display: block;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: all 200ms linear;
+  box-shadow: 0 0 25px rgba(255,235,167,.45);
+}
+.dark-light:checked + label{
+  transform: rotate(360deg);
+}
+.dark-light:checked + label:after,
+.dark-light:not(:checked) + label:after{
+  position: absolute;
+  content: '';
+  top: 1px;
+  left: 1px;
+  overflow: hidden;
+  z-index: 2;
+  display: block;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  background-color: #102770;
+  background-image: url('https://assets.codepen.io/1462889/moon.svg');
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: all 200ms linear;
+  opacity: 0;
+}
+.dark-light:checked + label:after {
+  opacity: 1;
+}
+.dark-light:checked + label:before,
+.dark-light:not(:checked) + label:before{
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  z-index: 1;
+  display: block;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  background-color: #def9fe;
+  background-image: url('https://assets.codepen.io/1462889/sun.svg');
+  background-size: 22px 22px;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: all 200ms linear;
+}
+.dark-light:checked + label:before{
+  background-color: #000;
+}
+
+.home-section{
+  position: relative;
+	background-image: var(--homesection-background);
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  left: 260px;
+  width: calc(100% - 260px);
+  transition: all 0.5s ease;
+}
+.sidebar.close ~ .home-section{
+  left: 78px;
+  width: calc(100% - 78px);
+}
+
+
+.home-section .home-content .bx-menu,
+.home-section .home-content .text .search-bar input{
+  color: #11101d;
+  font-size: 35px;
+}
+.home-section .home-content .bx-menu{
+  margin: 0 15px;
+  cursor: pointer;
+}
+.home-section .home-content .text .search-bar{
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.search-bar-container {
+  display: flex;
+  align-items: center;
+  background: #cfd8efa3;
+  border-radius: 4px;
+  padding: 5px;
+  width: 400px;
+  margin-left: 20%;
+}
+
+.search-bar {
+  width: 100%;
+  height: 100%;
+  background: #e4e9f78f;
+  border: none;
+  outline: none;
+  font-size: 20px;
+  color: #11101d;
+  padding: 5px;
+}
+
+.search-button {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search-button i {
+  font-size: 1rem;
+}
+
+@media (max-width: 420px) {
+  .sidebar.close .nav-links li .sub-menu{
+    display: none;
+  }
+}
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script>
+		$(document).ready(function(){
+			$(".notification_icon .fa-bell").click(function(){
+				$(".dropdown").toggleClass("active");
+			})
+		});
+	</script>
+  </head>
+<body>
+
+
+  <div class="sidebar close">
+    <div class="logo-details">
+      <!-- <img src="logo.png" alt="" class="logo-image"> -->
+      <i class='bx bx-grid-alt' ></i>
+      <span class="logo_name">Research Finder</span>
+    </div>
+    <ul class="nav-links">
+
+
+      <li>
+        <a href="#">
+          <i class='bx bx-grid-alt' ></i>
+          <span class="link_name">Dashboard</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="#">Category</a></li>
+        </ul>
+      </li>
+
+      <!-- <li>
+        <div class="iocn-link">
+          <a href="#">
+            <i class='bx bx-book-alt' ></i>
+            <span class="link_name">Posts</span>
+          </a>
+          <i class='bx bxs-chevron-down arrow' ></i>
+        </div>
+        <ul class="sub-menu">
+          <li><a class="link_name" href="#">Posts</a></li>
+          <li><a href="#">Web Design</a></li>
+          <li><a href="#">Login Form</a></li>
+          <li><a href="#">Card Design</a></li>
+        </ul>
+      </li> -->
+
+      <li>
+        <a href="/feedback">
+          <i class='bx bx-message-alt-detail' ></i>
+          <span class="link_name">FeedBack</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="#">FeedBack</a></li>
+        </ul>
+      </li>
+      
+      <!-- <li>
+        <a href="/tempcheck">
+          <i class='bx bx-coffee' ></i>
+          <span class="link_name">tempcheck</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="#">tempcheck</a></li>
+        </ul> -->
+      <!-- </li> -->
+
+      <li>
+        <a href="/chat">
+          <i class='bx bx-conversation'></i>
+          <span class="link_name">Chat</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="#">Chat</a></li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="/profile">
+          <i class='bx bx-user-circle' ></i>
+          <span class="link_name">Profile</span>
+        </a>
+        <ul class="sub-menu blank">
+          <li><a class="link_name" href="#">Profile</a></li>
+        </ul>
+      </li>
+
+
+      <li>
+        <div class="profile-details">
+          <div class="profile-content">
+            <!--<img src="image/profile.jpg" alt="profileImg">-->
+          </div>
+          <div class="name-job">
+            <div class="profile_name"><%= profileName %></div>
+            <div class="job"><%= jobTitle %></div>
+          </div><a href="/logout">
+            <i class='bx bx-log-out'></i>
+            <span class="link_name"> </span>
+        </a>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+
+  <section class="home-section">
+    <div class="home-content">
+      <i class='bx bx-menu' ></i>
+    </div>
+    <div class="search-bar-container">
+      <input type="text" class="search-bar" placeholder="Search...">
+      <button type="submit" class="search-button"><i class='bx bx-search'></i></button>
+    </div>
+
+  <input class="dark-light" type="checkbox" id="dark-light" name="dark-light"/>
+  <label for="dark-light"></label>
+
+  	
+<div class="wrapper">
+	<div class="notification_wrap">
+		<div class="notification_icon">
+			<i class="fas fa-bell"></i>
+		</div>
+		<div class="dropdown">
+			<!-- <div class="notify_item">
+				<div class="notify_info">
+					<p font-size: 10px>Alex commented on<span>Timeline Share</span></p>
+					<span class="notify_time">10 minutes ago</span>
+				</div>
+			</div> -->
+
+      <% notifications.forEach(notification => { %>
+        <div class="notify_item">
+            <div class="notify_info">
+                <p font-size: 10px><%= notification.message %></p>
+                <span class="notify_time"><%= new Date(notification.timestamp.seconds * 1000).toLocaleTimeString() %></span>
+            </div>
+        </div>
+    <% }); %>
+		</div>
+	</div>
+</div>
+
+    
+
+  </section>
+  
+  <div class="one"></div>
+  <script>
+    let arrow = document.querySelectorAll(".arrow");
+    for (var i = 0; i < arrow.length; i++) {
+      arrow[i].addEventListener("click", (e)=>{
+        let arrowParent = e.target.parentElement.parentElement;//selecting main parent of arrow
+        arrowParent.classList.toggle("showMenu");
+      });
+    }
+    let sidebar = document.querySelector(".sidebar");
+    let sidebarBtn = document.querySelector(".bx-menu");
+    console.log(sidebarBtn);
+    sidebarBtn.addEventListener("click", ()=>{
+      sidebar.classList.toggle("close");
+    });
+
+
+    const themeToggle = document.getElementById("dark-light");
+    const body = document.body;
+
+    // Load the preferred theme from localStorage (if available)
+    const savedTheme = localStorage.getItem('theme') || 'dark-theme';
+    body.classList.add(savedTheme);
+    themeToggle.checked = savedTheme === 'light-theme';
+
+    // Listen for the toggle change event
+    themeToggle.addEventListener("change", () => {
+      if (themeToggle.checked) {
+        body.classList.remove('dark-theme');
+        body.classList.add('light-theme');
+        localStorage.setItem('theme', 'light-theme');
+      } else {
+        body.classList.remove('light-theme');
+        body.classList.add('dark-theme');
+        localStorage.setItem('theme', 'dark-theme');
+      }
+    });
+  </script>
+</body>
+</html>
